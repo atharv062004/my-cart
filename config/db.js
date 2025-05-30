@@ -12,17 +12,13 @@ async function connectDB() {
   }
 
   if (!cached.promise) {
-    const uri = process.env.MONGODB_URI;
-
-    if (!uri) {
-      throw new Error("❌ MONGODB_URI is not defined in environment variables.");
-    }
-
     const opts = {
       bufferCommands: false,
     };
 
-    cached.promise = mongoose.connect(`${uri}/mycart`, opts).then((mongoose) => mongoose);
+    cached.promise = mongoose.connect(process.env.MONGODB_URI, opts).then((mongoose) => {
+      return mongoose;
+    });
   }
 
   cached.conn = await cached.promise;
